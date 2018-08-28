@@ -1,3 +1,7 @@
+// TODO: get rid of global
+let isSearchOpen = false;
+
+
 void function start() {
   const btn = document.querySelector('.btn');
 
@@ -11,9 +15,42 @@ void function start() {
 function keyEvent(event) {
   if (event.ctrlKey && event.key === '.') {
     toggleBoxs();
-  } else {
-    console.log(`key pressed = ${event.key}`);
+  } 
+
+  switch (event.key) {
+    case 'Escape':
+      closeSearchBar();
+      break;
+    default:
+      openSearchBar();
   }
+}
+
+function toggleSearch() {
+  const search = document.querySelector('.search-wrapper');
+  const boxWrapper = document.querySelector('.box-wrapper');
+
+  search.classList.toggle('search-visiable');
+  boxWrapper.classList.toggle('blur');
+}
+
+function openSearchBar() {
+  if (!isSearchOpen) {
+    const searchBar = document.querySelector('.search-bar');
+
+    toggleSearch();
+    searchBar.addEventListener('blur', closeSearchBar);
+    searchBar.focus();
+    isSearchOpen = true;
+  }
+}
+
+function closeSearchBar() {
+  const searchBar = document.querySelector('.search-bar');
+  toggleSearch();
+  isSearchOpen = false;
+  searchBar.removeEventListener('blur', closeSearchBar);
+  searchBar.value = '';
 }
 
 function setUpDate() {
